@@ -4,6 +4,7 @@ plot.VARCD <- function(VARCD, a = 0.05) {
 
   for (x in c("values", "type")) check(x, model = VARCD)
 
+
   x <- as.numeric(names(VARCD[["values"]]))
   y <- VARCD[["values"]]
 
