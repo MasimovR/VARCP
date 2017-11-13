@@ -49,50 +49,43 @@ darling_erdos <- function(p, k, n, resi, S_t, points, X) {
 
   iSigma <- solve(S_t)
 
-  S_h1 <- list()
-  S_h2 <- list()
-  sigmak <- list()
-  for(i in points) {
-    S_h1[[i]] <- MTS::VAR(X[1:i,, drop = FALSE], p = p,  output = F, include.mean = F)
-    S_h2[[i]] <- MTS::VAR(X[(i + 1):n,, drop = FALSE], p = p,  output = F, include.mean = F)
-  }
+  X1 <- lapply(points, function (point) X[1:point,, drop = FALSE] )
+  X2 <- lapply(points, function (point) X[(point + 1 - p):nrow(X),, drop = FALSE] )
 
-  prod3 <- function(X, order, Sigma, iSigma) {
-    return( sum(diag(iSigma %*% Sigma * (nrow(X) - order) )))
+  S_h1 <- lapply(X1,  MTS::VAR, p = p,  output = FALSE, include.mean = FALSE)
+  S_h2 <- lapply(X2,  MTS::VAR, p = p,  output = FALSE, include.mean = FALSE)
+
+
+  prod3 <- function(XN, iSigma) {
+    Sigma <- XN[["Sigma"]]
+    nx <- nrow(XN[["residuals"]])
+    return( nx * sum(diag(iSigma %*% Sigma )))
   }
 
   QT <- 0
   QT2 <- 0
   a <- 0
   for(c in 1:nrow(resi)){
-    a <- ((resi[c,,drop = F] %*% iSigma ) %*% resi[c, , drop = T])
+    a <- ((resi[c,,drop = F] %*% iSigma ) %*% resi[c,])
     QT <- a + QT
     QT2 <- a^2 + QT2
   }
 
-  Qk <- NULL
-  QK <- NULL
-  g <- 0
-  for(c in points){
-    g <- g + 1
-    Qk[g] <- prod3(S_h1[[c]][["data"]], p, S_h1[[c]][["Sigma"]], iSigma)
-    QK[g] <- prod3(S_h2[[c]][["data"]], p, S_h2[[c]][["Sigma"]], iSigma)
-  }
+  Qk <- sapply(S_h1, prod3, iSigma)
+  QK <- sapply(S_h2, prod3, iSigma)
 
   LR1 <- c(QT) - Qk - QK
-  A <- NULL
-  g <- 0
-  for(i in points){
-    g <- g + 1
-    A[g] <- sum(diag(iSigma %*% S_h1[[i]][["Sigma"]] - diag(k)))^2
-  }
-  ks <- QT2/n
-  LR2 <- LR1 + c( ( points - c(p)) /c(ks-k^2))*A
+
+  A <- sapply(S_h1, function(sh) sum(diag( iSigma %*% sh[["Sigma"]] - diag(k) ))^2)
+
+  ks <- QT2/2
+  LR2 <- LR2 + c( ( points - c(p) ) / c(ks-k^2) )*A
   d2 <- k*(k*p+1) + 1
   lgt <- 2*log(log(n))
-  bt <- ((lgt + (d2/2)*log(log(log(n))) - lgamma(d2/2))^2) / lgt
+  bt <- ( (lgt + (d2/2)*log((log(log(n)))) - log(gamma(d2/2)))^2 ) / lgt
   at <- sqrt(bt/lgt)
-  values <- (LR2-bt)/at
+  values <- (LR2-c(bt))/c(at)
+  plot(values)
   names(values) <- points
   statisitcvalue <- list("values" = values, type = "DARLING-ERDOS")
   class(statisitcvalue) <- "VARCD"

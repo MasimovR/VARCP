@@ -17,8 +17,6 @@ statcomp <- function(model = list(...), type = "CUSUM", trim = NULL) {
   p <- model[["order"]]
   iSigma <- solve(model[["Sigma"]])
 
-  X <- model[["data"]]
-  p <- model[["order"]]
   resi <- model[["residuals"]]
   S_t <- model[["Sigma"]]
 
