@@ -79,7 +79,7 @@ darling_erdos <- function(p, k, n, resi, S_t, points, X) {
   A <- sapply(S_h1, function(sh) sum(diag( iSigma %*% sh[["Sigma"]] - diag(k) ))^2)
 
   ks <- QT2/2
-  LR2 <- LR2 + c( ( points - c(p) ) / c(ks-k^2) )*A
+  LR2 <- LR1 + c( ( points - c(p) ) / c(ks-k^2) )*A
   d2 <- k*(k*p+1) + 1
   lgt <- 2*log(log(n))
   bt <- ( (lgt + (d2/2)*log((log(log(n)))) - log(gamma(d2/2)))^2 ) / lgt
