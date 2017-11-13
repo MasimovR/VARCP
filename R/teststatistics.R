@@ -85,7 +85,6 @@ darling_erdos <- function(p, k, n, resi, S_t, points, X) {
   bt <- ( (lgt + (d2/2)*log((log(log(n)))) - log(gamma(d2/2)))^2 ) / lgt
   at <- sqrt(bt/lgt)
   values <- (LR2-c(bt))/c(at)
-  plot(values)
   names(values) <- points
   statisitcvalue <- list("values" = values, type = "DARLING-ERDOS")
   class(statisitcvalue) <- "VARCD"
