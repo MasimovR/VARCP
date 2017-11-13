@@ -46,7 +46,7 @@ changetest <- function(x) {
     h <- as.numeric(names(which.max(abs(x[["values"]])))) + 1
     attr(Cmax, "names") <- "C(h)"
     attr(h, "names") <- "Estimated change point"
-    test$p.value <- 1 - (1 + 2*sum( ((-1)^(1:250))*exp(-2*((1:250)^2)*Cmax^2)))
+    test$p.value <- 1 - (1 + 2*sum( ((-1)^(1:500))*exp(-2*((1:500)^2)*Cmax^2)))
 
     test$estimate <- Cmax
     test$statistic <- h
@@ -54,8 +54,8 @@ changetest <- function(x) {
     class(test) <- "htest"
   }
   if(x[["type"]] == "DARLING-ERDOS") {
-    Cmax <- max(abs(x[["values"]]))
-    h <- as.numeric(names(which.max(abs(x[["values"]])))) + 1
+    Cmax <- max(x[["values"]])
+    h <- as.numeric(names(which.max(x[["values"]]))) + 1
     attr(Cmax, "names") <- "G(h)"
     attr(h, "names") <- "Estimated change point"
     test$p.value <- 1 - (exp(-2*exp(-(Cmax/2))))
