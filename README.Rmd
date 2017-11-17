@@ -14,22 +14,19 @@ knitr::opts_chunk$set(
 
 # VARCP
 
-The goal of VARCP is to ...
-
-## Installation
-
-You can install VARCP from github with:
 
 ```{r gh-installation, eval = FALSE}
 # install.packages("devtools")
-devtools::install_github("MasimovR/VARCP")
+#devtools::install_github("MasimovR/VARCP")
 ```
 
 ## Example
 
 This is a basic example which shows you how to solve a common problem:
 
-```{r example}
+```{r example, warning=FALSE}
+library(VARCP)
+
 phi <- matrix(c(0.2,-0.6,0.3,1),2,2)
 sig <- matrix(c(4,0.8,0.8,1),2,2)
 m1=VARMAsim(200, arlags = 1, phi=phi, sigma=sig)
