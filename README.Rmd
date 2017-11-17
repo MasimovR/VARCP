@@ -1,0 +1,41 @@
+---
+title: "VARCP"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r warning=FALSE}
+#devtools::install_github("MasimovR/VARCP")
+
+library(VARCP)
+
+phi <- matrix(c(0.2,-0.6,0.3,1),2,2)
+sig <- matrix(c(4,0.8,0.8,1),2,2)
+m1=VARMAsim(200, arlags = 1, phi=phi, sigma=sig)
+m2=VARMAsim(200, arlags = 1, phi=phi, sigma=sig*2)
+m <- rbind(m1$series, m2$series)  
+model <- VAR(m, p = 1)
+
+```
+
+```{r}
+CUSUM <- statcomp(model, type = "CUSUM")
+str(CUSUM)
+```
+```{r}
+plot(CUSUM, a = 0.01)
+```
+```{r}
+changetest(CUSUM)
+```
+```{r}
+CUSUM2 <- statcomp(model, type = "CUSUM", trim = 50)
+plot(CUSUM2)
+```
+```{r}
+LRT <- statcomp(model, type = "LRT")
+DET <- statcomp(model, type = "DARLING-ERDOS")
+```
