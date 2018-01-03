@@ -10,7 +10,7 @@ CUSUM <- function(p, k, n, resi, S_t, points) {
   values <- (points/sqrt(2*k*n)) * ((A/points) - c(a/n))
   names(values) <- points
   statisitcvalue <- list("values" = values, type = "CUSUM")
-  class(statisitcvalue) <- "VARCD"
+  class(statisitcvalue) <- "VARCP"
   return(statisitcvalue)
 }
 
@@ -40,7 +40,7 @@ LRT <- function(p, k, n, resi, S_t, points) {
   values <- n*log( S / (S1l * S2l) )
   names(values) <- points
   statisitcvalue <- list("values" = values, type = "LRT")
-  class(statisitcvalue) <- "VARCD"
+  class(statisitcvalue) <- "VARCP"
   return(statisitcvalue)
 }
 
@@ -86,8 +86,8 @@ darling_erdos <- function(p, k, n, resi, S_t, points, X) {
   at <- sqrt(bt/lgt)
   values <- (LR2-c(bt))/c(at)
   names(values) <- points
-  statisitcvalue <- list("values" = values, type = "DARLING-ERDOS")
-  class(statisitcvalue) <- "VARCD"
+  statisitcvalue <- list("values" = values, type = "DET")
+  class(statisitcvalue) <- "VARCP"
   return(statisitcvalue)
 }
 

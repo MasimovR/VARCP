@@ -14,3 +14,4 @@ LinkingTo: Rcpp,
 Imports: Rcpp,
     RcppEigen
 Depends: MTS
+RoxygenNote: 6.0.1
