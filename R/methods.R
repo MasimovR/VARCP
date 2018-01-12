@@ -89,14 +89,14 @@ plot.VARCP <- function(VARCP, a = 0.05, ...) {
 #'
 changetest <- function(VARCP) {
 
-  for (i in c("values", "type")) check(i, x)
+  for (i in c("values", "type")) check(i, VARCP)
   test <- list()
-  test$method <- paste0(x[["type"]], " test")
-  test$data.name <- deparse(substitute(x))
+  test$method <- paste0(VARCP[["type"]], " test")
+  test$data.name <- deparse(substitute(VARCP))
 
-  if(x[["type"]] == "CUSUM") {
-    Cmax <- max(abs(x[["values"]]))
-    h <- as.numeric(names(which.max(abs(x[["values"]])))) + 1
+  if(VARCP[["type"]] == "CUSUM") {
+    Cmax <- max(abs(VARCP[["values"]]))
+    h <- as.numeric(names(which.max(abs(VARCP[["values"]])))) + 1
     attr(Cmax, "names") <- "C(h)"
     attr(h, "names") <- "Estimated change point"
     test$p.value <- 1 - (1 + 2*sum( ((-1)^(1:500))*exp(-2*((1:500)^2)*Cmax^2)))
@@ -106,9 +106,9 @@ changetest <- function(VARCP) {
 
     class(test) <- "htest"
   }
-  if(x[["type"]] == "DET") {
-    Cmax <- max(x[["values"]])
-    h <- as.numeric(names(which.max(x[["values"]]))) + 1
+  if(VARCP[["type"]] == "DET") {
+    Cmax <- max(VARCP[["values"]])
+    h <- as.numeric(names(which.max(VARCP[["values"]]))) + 1
     attr(Cmax, "names") <- "G(h)"
     attr(h, "names") <- "Estimated change point"
     test$p.value <- 1 - (exp(-2*exp(-(Cmax/2))))
@@ -118,9 +118,9 @@ changetest <- function(VARCP) {
 
     class(test) <- "htest"
   }
-  if(x[["type"]] == "LRT") {
-    Cmax <- max(abs(x[["values"]]))
-    h <- as.numeric(names(which.max(abs(x[["values"]])))) + 1
+  if(VARCP[["type"]] == "LRT") {
+    Cmax <- max(abs(VARCP[["values"]]))
+    h <- as.numeric(names(which.max(abs(VARCP[["values"]])))) + 1
     attr(Cmax, "names") <- "G(h)"
     attr(h, "names") <- "Estimated change point"
     test$p.value <- NULL
